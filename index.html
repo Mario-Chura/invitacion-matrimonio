@@ -429,47 +429,56 @@
         // --- Música de Fondo Automática ---
         const music = document.getElementById('background-music');
         music.volume = 0.5;
+        let musicStarted = false;
         
-        // Múltiples intentos de reproducción automática
-        let playAttempts = 0;
-        const maxAttempts = 5;
-        
-        function attemptPlay() {
-            playAttempts++;
-            music.play()
-                .then(() => {
-                    console.log('Música reproduciendo automáticamente');
-                })
-                .catch((error) => {
-                    console.log('Intento ' + playAttempts + ' falló:', error.message);
-                    
-                    // Si falla, seguir intentando con eventos
-                    if (playAttempts < maxAttempts) {
-                        setTimeout(attemptPlay, 300);
-                    } else {
-                        // Último recurso: esperar cualquier interacción
-                        const events = ['click', 'touchstart', 'touchend', 'mousedown', 'keydown', 'scroll'];
-                        const playOnce = () => {
-                            music.play();
-                            events.forEach(event => {
-                                document.removeEventListener(event, playOnce);
-                            });
-                        };
-                        events.forEach(event => {
-                            document.addEventListener(event, playOnce, { once: true, passive: true });
-                        });
-                    }
-                });
+        // Función para iniciar música
+        function startMusic() {
+            if (!musicStarted) {
+                music.play()
+                    .then(() => {
+                        console.log('✓ Música reproduciendo');
+                        musicStarted = true;
+                    })
+                    .catch((error) => {
+                        console.log('⚠ Esperando interacción del usuario para reproducir música');
+                    });
+            }
         }
         
-        // Iniciar reproducción en diferentes momentos
-        attemptPlay(); // Inmediatamente
-        document.addEventListener('DOMContentLoaded', attemptPlay);
-        window.addEventListener('load', attemptPlay);
+        // Intentar iniciar inmediatamente
+        startMusic();
         
-        // Intentar después de un breve delay
-        setTimeout(attemptPlay, 100);
-        setTimeout(attemptPlay, 500);
+        // Reintentar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startMusic);
+        } else {
+            startMusic();
+        }
+        
+        // Reintentar cuando la página cargue completamente
+        window.addEventListener('load', startMusic);
+        
+        // Capturar CUALQUIER interacción del usuario para iniciar música
+        const userEvents = ['click', 'touchstart', 'touchend', 'mousedown', 'mousemove', 'keydown', 'scroll'];
+        
+        function startOnUserInteraction() {
+            if (!musicStarted) {
+                startMusic();
+                // Remover listeners después del primer intento exitoso
+                userEvents.forEach(event => {
+                    document.removeEventListener(event, startOnUserInteraction);
+                });
+            }
+        }
+        
+        userEvents.forEach(event => {
+            document.addEventListener(event, startOnUserInteraction, { passive: true });
+        });
+        
+        // Intentos adicionales con delays
+        setTimeout(startMusic, 100);
+        setTimeout(startMusic, 500);
+        setTimeout(startMusic, 1000);
 
         // --- Confeti ---
         const canvas = document.getElementById('confetti-canvas');
