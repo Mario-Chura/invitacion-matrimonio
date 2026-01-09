@@ -41,6 +41,43 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             text-align: center;
             box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Corazones flotantes en la invitación */
+        .invitation-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .invitation-hearts .heart-float {
+            position: absolute;
+            font-size: 1.2rem;
+            opacity: 0.4;
+            animation: heartFloatInv 8s ease-in-out infinite;
+        }
+
+        .invitation-hearts .heart-float:nth-child(1) { left: 5%; animation-delay: 0s; font-size: 1rem; }
+        .invitation-hearts .heart-float:nth-child(2) { left: 15%; animation-delay: 1.5s; font-size: 0.8rem; }
+        .invitation-hearts .heart-float:nth-child(3) { left: 25%; animation-delay: 3s; font-size: 1.1rem; }
+        .invitation-hearts .heart-float:nth-child(4) { left: 75%; animation-delay: 0.8s; font-size: 0.9rem; }
+        .invitation-hearts .heart-float:nth-child(5) { left: 85%; animation-delay: 2s; font-size: 1rem; }
+        .invitation-hearts .heart-float:nth-child(6) { left: 95%; animation-delay: 4s; font-size: 0.8rem; }
+        .invitation-hearts .heart-float:nth-child(7) { left: 50%; animation-delay: 2.5s; font-size: 1.3rem; }
+        .invitation-hearts .heart-float:nth-child(8) { left: 35%; animation-delay: 5s; font-size: 0.7rem; }
+        .invitation-hearts .heart-float:nth-child(9) { left: 65%; animation-delay: 3.5s; font-size: 0.9rem; }
+        .invitation-hearts .heart-float:nth-child(10) { left: 10%; animation-delay: 6s; font-size: 1rem; }
+
+        @keyframes heartFloatInv {
+            0% { transform: translateY(850px) rotate(0deg) scale(0.5); opacity: 0; }
+            10% { opacity: 0.5; }
+            50% { opacity: 0.4; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-50px) rotate(360deg) scale(1); opacity: 0; }
         }
 
         /* Decoración simple en esquina superior izquierda */
@@ -368,7 +405,43 @@
             align-items: center;
             z-index: 9999;
             cursor: pointer;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            transition: opacity 1s ease, visibility 1s ease;
+            overflow: hidden;
+        }
+
+        /* Efecto de partículas/estrellas flotantes */
+        .welcome-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #c9a961, transparent),
+                radial-gradient(2px 2px at 40px 70px, #fff, transparent),
+                radial-gradient(3px 3px at 50px 160px, #c9a961, transparent),
+                radial-gradient(2px 2px at 90px 40px, #fff, transparent),
+                radial-gradient(3px 3px at 130px 80px, #c9a961, transparent),
+                radial-gradient(2px 2px at 160px 120px, #fff, transparent),
+                radial-gradient(2px 2px at 200px 50px, #c9a961, transparent),
+                radial-gradient(3px 3px at 250px 90px, #fff, transparent),
+                radial-gradient(2px 2px at 300px 150px, #c9a961, transparent),
+                radial-gradient(2px 2px at 350px 30px, #fff, transparent);
+            background-size: 400px 200px;
+            animation: sparkle 8s linear infinite;
+            opacity: 0.6;
+        }
+
+        /* Efecto de luz brillante en el centro */
+        .welcome-overlay::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(201, 169, 97, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glow 3s ease-in-out infinite;
         }
 
         .welcome-overlay.hidden {
@@ -379,44 +452,157 @@
 
         .welcome-overlay h1 {
             font-family: 'Great Vibes', cursive;
-            font-size: 3.5rem;
+            font-size: 4rem;
             color: #c9a961;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: pulse 2s ease-in-out infinite;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(201, 169, 97, 0.5), 2px 2px 4px rgba(0,0,0,0.3);
+            animation: titleShine 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-overlay .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #e8d5a3;
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeSlideIn 1s ease-out 0.5s forwards;
+            position: relative;
+            z-index: 2;
+            font-style: italic;
+            letter-spacing: 2px;
         }
 
         .welcome-overlay p {
             font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #fff;
+            margin-bottom: 35px;
+            opacity: 0;
+            animation: fadeSlideIn 1s ease-out 0.8s forwards;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-overlay .date-preview {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #c9a961;
             margin-bottom: 40px;
-            opacity: 0.9;
+            opacity: 0;
+            animation: fadeSlideIn 1s ease-out 1s forwards;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .welcome-overlay .date-preview span {
+            font-size: 2.5rem;
+            font-weight: bold;
         }
 
         .welcome-overlay .enter-btn {
-            padding: 15px 50px;
+            padding: 18px 60px;
             font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #7a3838;
             background: linear-gradient(135deg, #c9a961 0%, #e8d5a3 50%, #c9a961 100%);
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(201, 169, 97, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: bounce 2s ease-in-out infinite;
+            box-shadow: 0 5px 30px rgba(201, 169, 97, 0.5), 0 0 50px rgba(201, 169, 97, 0.2);
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeSlideIn 1s ease-out 1.2s forwards, btnPulse 2s ease-in-out 2.2s infinite;
+            position: relative;
+            z-index: 2;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .welcome-overlay .enter-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 30px rgba(201, 169, 97, 0.6);
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(201, 169, 97, 0.6), 0 0 80px rgba(201, 169, 97, 0.3);
         }
 
-        .welcome-overlay .hearts {
-            font-size: 2rem;
-            margin-top: 30px;
-            animation: float 3s ease-in-out infinite;
+        .welcome-overlay .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .welcome-overlay .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            animation: floatUp 6s ease-in-out infinite;
+        }
+
+        .welcome-overlay .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .welcome-overlay .heart:nth-child(2) { left: 20%; animation-delay: 1s; font-size: 1rem; }
+        .welcome-overlay .heart:nth-child(3) { left: 35%; animation-delay: 2s; }
+        .welcome-overlay .heart:nth-child(4) { left: 50%; animation-delay: 0.5s; font-size: 2rem; }
+        .welcome-overlay .heart:nth-child(5) { left: 65%; animation-delay: 1.5s; }
+        .welcome-overlay .heart:nth-child(6) { left: 80%; animation-delay: 2.5s; font-size: 1rem; }
+        .welcome-overlay .heart:nth-child(7) { left: 90%; animation-delay: 0.8s; }
+
+        .welcome-overlay .rings {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeSlideIn 1s ease-out 0.3s forwards, ringFloat 3s ease-in-out 1.3s infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-200px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        @keyframes titleShine {
+            0%, 100% { 
+                text-shadow: 0 0 20px rgba(201, 169, 97, 0.5), 2px 2px 4px rgba(0,0,0,0.3);
+                transform: scale(1);
+            }
+            50% { 
+                text-shadow: 0 0 40px rgba(201, 169, 97, 0.8), 0 0 60px rgba(201, 169, 97, 0.4), 2px 2px 4px rgba(0,0,0,0.3);
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes fadeSlideIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes btnPulse {
+            0%, 100% { box-shadow: 0 5px 30px rgba(201, 169, 97, 0.5), 0 0 50px rgba(201, 169, 97, 0.2); }
+            50% { box-shadow: 0 5px 40px rgba(201, 169, 97, 0.7), 0 0 80px rgba(201, 169, 97, 0.4); }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes ringFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
         }
 
         @keyframes pulse {
@@ -435,10 +621,23 @@
 
     <!-- Overlay de Bienvenida -->
     <div class="welcome-overlay" id="welcome-overlay">
+        <!-- Corazones flotantes -->
+        <div class="floating-hearts">
+            <div class="heart">💕</div>
+            <div class="heart">❤️</div>
+            <div class="heart">💗</div>
+            <div class="heart">💖</div>
+            <div class="heart">💕</div>
+            <div class="heart">❤️</div>
+            <div class="heart">💗</div>
+        </div>
+        
+        <div class="rings">💍✨💍</div>
         <h1>Mario & Marberly</h1>
-        <p>Te invitan a su Matrimonio Civil</p>
-        <button class="enter-btn" id="enter-btn">💍 Abrir Invitación 💍</button>
-        <div class="hearts">💕</div>
+        <p class="subtitle">Un amor para toda la vida</p>
+        <p>Te invitan a celebrar su unión</p>
+        <div class="date-preview">📅 <span>20</span> de Febrero 2026</div>
+        <button class="enter-btn" id="enter-btn">✨ Abrir Invitación ✨</button>
     </div>
 
     <canvas id="confetti-canvas"></canvas>
@@ -450,6 +649,20 @@
     </audio>
 
     <div class="invitation-card">
+        
+        <!-- Corazones flotantes en la invitación -->
+        <div class="invitation-hearts">
+            <div class="heart-float">💕</div>
+            <div class="heart-float">❤️</div>
+            <div class="heart-float">💗</div>
+            <div class="heart-float">💖</div>
+            <div class="heart-float">💕</div>
+            <div class="heart-float">❤️</div>
+            <div class="heart-float">💗</div>
+            <div class="heart-float">💖</div>
+            <div class="heart-float">💕</div>
+            <div class="heart-float">❤️</div>
+        </div>
         
         <div class="photo-wrapper">
             <img src="Foto1.jpg" alt="Foto 1" class="couple-photo active">
