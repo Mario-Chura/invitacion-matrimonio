@@ -459,6 +459,70 @@
             animation: titleShine 3s ease-in-out infinite;
             position: relative;
             z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+        }
+
+        .welcome-overlay h1 .name {
+            display: block;
+        }
+
+        .welcome-overlay h1 .ampersand {
+            font-size: 2.5rem;
+            color: #e8d5a3;
+            margin: 5px 0;
+        }
+
+        /* Responsivo para móvil */
+        @media (max-width: 480px) {
+            .welcome-overlay h1 {
+                font-size: 3rem;
+            }
+            .welcome-overlay h1 .ampersand {
+                font-size: 2rem;
+            }
+            .welcome-overlay .subtitle {
+                font-size: 1.1rem;
+            }
+            .welcome-overlay p {
+                font-size: 0.9rem;
+            }
+            .welcome-overlay .date-preview {
+                font-size: 1.2rem;
+            }
+            .welcome-overlay .date-preview span {
+                font-size: 2rem;
+            }
+            .welcome-overlay .enter-btn {
+                padding: 15px 40px;
+                font-size: 1rem;
+            }
+            .welcome-overlay .rings {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .welcome-overlay h1 {
+                font-size: 2.5rem;
+            }
+            .welcome-overlay h1 .ampersand {
+                font-size: 1.8rem;
+            }
+            .welcome-overlay .subtitle {
+                font-size: 1rem;
+            }
+            .welcome-overlay .date-preview {
+                font-size: 1rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+            .welcome-overlay .enter-btn {
+                padding: 12px 30px;
+                font-size: 0.9rem;
+            }
         }
 
         .welcome-overlay .subtitle {
@@ -633,7 +697,11 @@
         </div>
         
         <div class="rings">💍✨💍</div>
-        <h1>Mario & Marberly</h1>
+        <h1>
+            <span class="name">Mario</span>
+            <span class="ampersand">&</span>
+            <span class="name">Marberly</span>
+        </h1>
         <p class="subtitle">Un amor para toda la vida</p>
         <p>Te invitan a celebrar su unión</p>
         <div class="date-preview">📅 <span>20</span> de Febrero 2026</div>
