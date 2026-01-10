@@ -574,6 +574,81 @@
             font-weight: bold;
         }
 
+        /* Cuenta Regresiva */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeSlideIn 1s ease-out 1.1s forwards;
+            position: relative;
+            z-index: 2;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(201, 169, 97, 0.15);
+            border: 2px solid rgba(201, 169, 97, 0.4);
+            border-radius: 12px;
+            padding: 12px 18px;
+            min-width: 65px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .countdown-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #c9a961;
+            text-shadow: 0 0 10px rgba(201, 169, 97, 0.5);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.75rem;
+            color: #e8d5a3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .countdown-container {
+                gap: 8px;
+            }
+            .countdown-item {
+                padding: 8px 12px;
+                min-width: 55px;
+            }
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+            .countdown-label {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .countdown-container {
+                gap: 5px;
+            }
+            .countdown-item {
+                padding: 6px 8px;
+                min-width: 45px;
+            }
+            .countdown-number {
+                font-size: 1.2rem;
+            }
+            .countdown-label {
+                font-size: 0.6rem;
+            }
+        }
+
         .welcome-overlay .enter-btn {
             padding: 18px 60px;
             font-family: 'Playfair Display', serif;
@@ -708,6 +783,27 @@
         </h1>
         <p>Te invitamos a celebrar nuestro matrimonio civil</p>
         <div class="date-preview"><span>20</span> de Febrero 2026</div>
+        
+        <!-- Cuenta Regresiva -->
+        <div class="countdown-container">
+            <div class="countdown-item">
+                <span class="countdown-number" id="countdown-days">00</span>
+                <span class="countdown-label">Días</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="countdown-hours">00</span>
+                <span class="countdown-label">Horas</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="countdown-minutes">00</span>
+                <span class="countdown-label">Min</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="countdown-seconds">00</span>
+                <span class="countdown-label">Seg</span>
+            </div>
+        </div>
+        
         <button class="enter-btn" id="enter-btn">✨ Abrir Invitación ✨</button>
     </div>
 
@@ -815,6 +911,34 @@
         // Event listeners para el botón y el overlay completo
         enterBtn.addEventListener('click', enterInvitation);
         welcomeOverlay.addEventListener('click', enterInvitation);
+
+        // --- Cuenta Regresiva ---
+        const weddingDate = new Date('February 20, 2026 12:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown-days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
+
+            if (distance < 0) {
+                document.getElementById('countdown-days').textContent = '00';
+                document.getElementById('countdown-hours').textContent = '00';
+                document.getElementById('countdown-minutes').textContent = '00';
+                document.getElementById('countdown-seconds').textContent = '00';
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
         // --- Confeti ---
         const canvas = document.getElementById('confetti-canvas');
